@@ -7,6 +7,6 @@
 # This file is created by Marboo<http://marboo.io> template file $MARBOO_HOME/.media/starts/default.py
 # 本文件由 Marboo<http://marboo.io> 模板文件 $MARBOO_HOME/.media/starts/default.py 创建
 
-from Obsidian.cmdline import execute
+from .Obsidian.cmdline import execute
 
 execute()

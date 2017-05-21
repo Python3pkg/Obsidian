@@ -24,9 +24,9 @@ class DDSpider(Spider):
             else:
                 command = "%s.re(%s)" % (command, pip["value"])
 
-        print("*"*20)
+        print(("*"*20))
         print(command)
-        print("*"*20)
+        print(("*"*20))
         selector = self.eval(selector, command)
 
         if len(pipline) > 0 and pipline[-1]["type"] != "re" and should_extract:
@@ -51,7 +51,7 @@ class DDSpider(Spider):
             for item in self.parse_step_generator()(response):
                 yield item
         else:
-            for item in map(lambda x: self.prefix + x, self.juice(response, self.link_array_pipline)):
+            for item in [self.prefix + x for x in self.juice(response, self.link_array_pipline)]:
                 yield Request(url = item, callback=self.parse_page)
 
     def parse_step_generator(self, i=0):
@@ -60,14 +60,14 @@ class DDSpider(Spider):
                 yield self.parse_page(response)
             else:
                 pipline = self.link_array_pipline[i]
-                for item in map(lambda x: self.prefix + x, self.juice(response, pipline)):
+                for item in [self.prefix + x for x in self.juice(response, pipline)]:
                     yield Request(url = item, callback=self.parse_step_generator(i+1))
         return fun
 
     def parse_page(self, response):
         main_content_selector = self.juice(response, self.main_content_pipline, 0)
         item = ObsidianItem()
-        for key, value in self.item_pipline.items():
+        for key, value in list(self.item_pipline.items()):
             if key not in ObsidianItem.fields:
                 ObsidianItem.fields[key] = scrapy.Field()
             item[key] = self.juice(main_content_selector, value)
